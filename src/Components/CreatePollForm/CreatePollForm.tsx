@@ -1,5 +1,6 @@
 import React from "react";
 import {Button, Col, ControlLabel, Form, FormControl, FormGroup, Panel} from "react-bootstrap";
+import DatePicker from 'react-datepicker';
 
 interface CreatePollFormState {
     title: string,
@@ -38,7 +39,7 @@ class CreatePollForm extends React.Component<() => {}, CreatePollFormState> {
                         Datum:
                     </Col>
                     <Col sm={10} className={'FormRow'}>
-
+                        <DatePicker onChange={() => {}}/>
                     </Col>
                 </FormGroup>
                 <Button type="submit">Erstellen</Button>

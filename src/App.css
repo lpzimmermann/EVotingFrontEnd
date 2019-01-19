@@ -30,3 +30,43 @@
     transform: rotate(360deg);
   }
 }
+
+.NavBar-Logo {
+  height: 100%;
+  display: inline-block !important;
+}
+
+.Poll {
+  width: 50%;
+  margin: auto;
+  margin-bottom:20px;
+}
+
+.PagePanel {
+  width: 50%;
+  margin: auto;
+}
+
+.PollDate {
+  margin:auto;
+  margin-bottom:10px;
+}
+
+.VoteButton {
+  margin-left: 2px;
+  margin-right: 2px;
+}
+
+.FormRow {
+  margin-bottom: 10px;
+}
+
+.TextArea textarea {
+  max-width: 100%;
+  min-width: 100%;
+}
+
+.CreatePollPanel {
+  width: 70%;
+  margin:auto;
+}

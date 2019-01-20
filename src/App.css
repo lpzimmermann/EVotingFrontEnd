@@ -67,6 +67,18 @@
 }
 
 .CreatePollPanel {
-  width: 70%;
+  width: 60%;
   margin:auto;
+}
+
+.control-label {
+  text-align: left;
+}
+
+.align-left {
+  text-align: left;
+}
+
+.align-right {
+  text-align: right;
 }

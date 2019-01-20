@@ -10,13 +10,17 @@ class CreatePoll extends React.Component<() => {}, () => {}> {
         </PageHeader>);
     }
 
+    submit(title: string, description: string, date: Date) {
+        alert(title + ' - ' + description + ' - ' + date);
+    }
+
     render() {
         return(
             <div>
             {this.getPageHeader()}
             <Panel className={'CreatePollPanel'}>
                 <Panel.Body>
-                     <CreatePollForm/>
+                     <CreatePollForm submit={this.submit.bind(this)}/>
                 </Panel.Body>
             </Panel>
             </div>

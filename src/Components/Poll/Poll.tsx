@@ -16,7 +16,7 @@ class Poll extends React.Component<PollProps, () => {}> {
             <Panel.Body>
                 <h1 className={'PollTitle'}>{this.props.title} </h1>
                 <h4><Label className={'PollDate'} bsStyle={'info'}>{this.props.due}</Label></h4>
-                <p>{this.props.description}</p>
+                <p>{this.props.description}</p>+
                 <Button type="submit" bsStyle={'success'} className={'VoteButton'} onClick={() => this.props.vote('YES')}>JA</Button>
                 <Button type="submit" bsStyle={'danger'} className={'VoteButton'} onClick={() => this.props.vote('NO')}>NEIN</Button>
             </Panel.Body>

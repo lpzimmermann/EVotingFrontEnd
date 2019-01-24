@@ -1,9 +1,15 @@
 import React, { Component } from 'react';
 import {Nav, Navbar, NavItem} from "react-bootstrap";
-import logo from '../../logo.svg';
+import logo from '../../Img/logo.svg';
 
 class NavigationBar extends Component {
+
+    /**
+     * Renders this component
+     * @returns {any}
+     */
     render() {
+
         return(
             <Navbar>
                 <Navbar.Header>

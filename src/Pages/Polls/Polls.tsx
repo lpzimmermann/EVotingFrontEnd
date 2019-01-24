@@ -1,44 +1,93 @@
 import React from "react";
 import {PageHeader} from "react-bootstrap";
+import {AnswerType, PollType, Vote} from "../../Abstractions/Abstractions";
+import PollApiHandler from "../../Api/PollApiHandler";
+import VoteApiHandler from "../../Api/VoteApiHandler";
 import Poll from "../../Components/Poll/Poll";
 
+interface PollsState {
+    polls: PollType[]
+}
 
-class Polls extends React.Component<() => {},()=>{}> {
+class Polls extends React.Component<() => {}, PollsState> {
 
-    vote(answer: 'YES' | 'NO') {
-        alert(answer);
+    /**
+     * Initializes this class
+     * @param props
+     */
+    constructor(props: any){
+        super(props);
+        this.state = {polls: []}
+        this.updatePolls();
     }
 
+    /**
+     * Makes an API call to place the vote
+     * @param {string} aPollId
+     * @param {string} anUserId
+     * @param {AnswerType} anAnswer
+     */
+    vote(aPollId: string, anUserId: string, anAnswer: AnswerType) {
+        new VoteApiHandler().putVote({pollId: aPollId, userId: anUserId, answer: anAnswer});
+        this.updatePolls();
+    }
+
+    /**
+     * Returns the user-id stored in the local storage
+     * @returns {string}
+     */
+    getUserIdFromLocalStorage() {
+            return '' + localStorage.getItem('user');
+    }
+
+    /**
+     * Makes an API call to load the available polls for the logged in user
+     * @returns {Promise<void>}
+     */
+    async updatePolls() {
+
+        var polls = await new PollApiHandler().getPolls(this.getUserIdFromLocalStorage());
+
+        if(polls != null){
+          this.setState({polls: polls});
+        }
+    }
+
+    /**
+     * Renders this component
+     * @returns {any}
+     */
     render() {
-        return(
-            <div>
-                <PageHeader>
-                    Verfügbare Abstimmungen
-                </PageHeader>
+        var polls = this.state.polls;
+        var pollElements = [];
+        for(let poll of polls) {
+            pollElements.push(<Poll title={poll.title} description={poll.description} due={new Date(poll.date.toString()).toDateString()} vote={(anAnswer: AnswerType) => this.vote(poll.id, this.getUserIdFromLocalStorage(), anAnswer)}/>)
+        }
 
-                {this.getPolls()}
-            </div>
-        );
+        if(pollElements.length != 0){
+            return(
+                <div>
+                    <PageHeader>
+                        Verfügbare Abstimmungen
+                    </PageHeader>
+
+                    {pollElements}
+                </div>
+            );
+        }
+        else {
+            return(
+                <div>
+                    <PageHeader>
+                        Keine offenen Abstimmungen.
+                    </PageHeader>
+                </div>
+            );
+        }
+
     }
 
-    getPolls() {
-        var polls = [<Poll title={'Hornkuh Initiative'} description={'Hörner beinhalten zwar ein Verletzungsrisiko. Doch mit richtiger Stallplanung und gutem Tierbezug kann es minimiert werden. Ganz wichtig: Die Tierhalterinnen und Tierhalter entscheiden weiterhin selbst, ob sie Tiere mit oder ohne Hörner halten. \n' +
-        '\n' +
-        'Verankerung in Bundesverfassung\n' +
-        'Seit 9 Jahren stösst das Anliegen überall auf Sympathie, löste aber weder bei der Bundesverwaltung noch dem Parlament eine Konkretisierung auf Gesetzesebene aus. Darum entstand die Volksinitiative. Sie kommt mit einer kurzen, klaren Ergänzung eines bereits vorhandenen Verfassungsartikels aus. Ein Gegenvorschlag, der eine Abstimmung unnötig gemacht hätte, wurde von der zuständigen Ständeratskommission abgelehnt.'} due={'09.09.2018'} vote={(answer: 'YES' | 'NO') => this.vote(answer)}/>
-            ,
-            <Poll title={'Hasen Initiative'} description={'Hörner beinhalten zwar ein Verletzungsrisiko. Doch mit richtiger Stallplanung und gutem Tierbezug kann es minimiert werden. Ganz wichtig: Die Tierhalterinnen und Tierhalter entscheiden weiterhin selbst, ob sie Tiere mit oder ohne Hörner halten. \n' +
-            '\n' +
-            'Verankerung in Bundesverfassung\n' +
-            'Seit 9 Jahren stösst das Anliegen überall auf Sympathie, löste aber weder bei der Bundesverwaltung noch dem Parlament eine Konkretisierung auf Gesetzesebene aus. Darum entstand die Volksinitiative. Sie kommt mit einer kurzen, klaren Ergänzung eines bereits vorhandenen Verfassungsartikels aus. Ein Gegenvorschlag, der eine Abstimmung unnötig gemacht hätte, wurde von der zuständigen Ständeratskommission abgelehnt.'} due={'12.03.2019'} vote={(answer: 'YES' | 'NO') => this.vote(answer)}/>
-            ,
-            <Poll title={'Hörbuch Initiative'} description={'Hörner beinhalten zwar ein Verletzungsrisiko. Doch mit richtiger Stallplanung und gutem Tierbezug kann es minimiert werden. Ganz wichtig: Die Tierhalterinnen und Tierhalter entscheiden weiterhin selbst, ob sie Tiere mit oder ohne Hörner halten. \n' +
-            '\n' +
-            'Verankerung in Bundesverfassung\n' +
-            'Seit 9 Jahren stösst das Anliegen überall auf Sympathie, löste aber weder bei der Bundesverwaltung noch dem Parlament eine Konkretisierung auf Gesetzesebene aus. Darum entstand die Volksinitiative. Sie kommt mit einer kurzen, klaren Ergänzung eines bereits vorhandenen Verfassungsartikels aus. Ein Gegenvorschlag, der eine Abstimmung unnötig gemacht hätte, wurde von der zuständigen Ständeratskommission abgelehnt.'} due={'18.02.2019'} vote={(answer: 'YES' | 'NO') => this.vote(answer)}/>
-        ]
-        return polls;
-    }
+
 
 }
 export default Polls;
